@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex justify-between">
             <a href="{{ auth()->user()->hasRole('admin') ? route('admin.dashboard') : route('editor.dashboard')}}"
-                           class="text-xl font-semibold text-gray-900 text-white">
+                           class="text-xl font-semibold  text-white">
                            <- Back
                         </a>
             <h2 class="font-semibold text-xl text-white leading-tight">Manage Users</h2>
