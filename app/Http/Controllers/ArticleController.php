@@ -2,22 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Artikel;
+use App\Models\Article;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
-class ArtikelController extends Controller
+class ArticleController extends Controller
 {
-    // -------------------Artikel-----------------
-    
+    // -------------------Article-----------------
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        return view('artikel.create');
+        return view('articles.create');
     }
 
     /**
@@ -25,8 +24,8 @@ class ArtikelController extends Controller
      */
     public function show($id)
     {
-        $artikel = Artikel::findOrFail($id);
-        return view('artikel.show', compact('artikel'));
+        $article = Article::findOrFail($id);
+        return view('articles.show', compact('article'));
     }
 
     /**
@@ -34,8 +33,8 @@ class ArtikelController extends Controller
      */
     public function edit($id)
     {
-        $artikel = Artikel::findOrFail($id);
-        return view('artikel.edit', compact('artikel'));
+        $article = Article::findOrFail($id);
+        return view('articles.edit', compact('article'));
     }
 
     public function store(Request $request)
@@ -46,8 +45,8 @@ class ArtikelController extends Controller
         ]);
         
         $validated['author_id'] = Auth::id();
-        
-        $artikel = Artikel::create($validated);
+
+        $article = Article::create($validated);
 
         if (auth()->user()->hasRole('admin')) {
             return redirect()->route('admin.dashboard')->with('success', 'Deleted');
@@ -61,22 +60,22 @@ class ArtikelController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $artikel = Artikel::findOrFail($id);
-        $artikel->update($request->all());
-        return redirect()->route('artikel.show', $artikel->id)->with('success', 'Updated');
+        $article = Article::findOrFail($id);
+        $article->update($request->all());
+        return redirect()->route('articles.show', $article->id)->with('success', 'Updated');
     }
 
     public function destroy(Request $request, $id)
     {
-        $artikel = Artikel::findOrFail($id);
-        $artikel->delete();
-        if ($request->query('from') === 'myartikel') {
+        $article = Article::findOrFail($id);
+        $article->delete();
+        if ($request->query('from') === 'myarticles') {
             if (auth()->user()->hasRole('admin')) {
                 return redirect()->route('admin.dashboard')->with('success', 'Deleted');
             }
 
             if (auth()->user()->hasRole('editor')) {
-                return redirect()->route('editor.myartikel')->with('success', 'Deleted');
+                return redirect()->route('editor.myarticles')->with('success', 'Deleted');
             }
         }
 
@@ -86,22 +85,22 @@ class ArtikelController extends Controller
             }
 
             if (auth()->user()->hasRole('editor')) {
-                return redirect()->route('editor.myartikel')->with('success', 'Deleted');
+                return redirect()->route('editor.myarticles')->with('success', 'Deleted');
             }
         }
         // return redirect()->back()->with('success', 'Deleted');
     }
 
-    // -----------------------Admin Artikel -------------------
+    // -----------------------Admin Articles -------------------
 
     public function indexAdmin()
     {
-        $artikelCount = Artikel::where('author_id', Auth::id())->count();
-        $artikelShow = Artikel::where('author_id', Auth::id())->latest()->get();
-        $artikel = Artikel::latest()->get();
-        $artikelTotal = Artikel::count();
+        $articleCount = Article::where('author_id', Auth::id())->count();
+        $articleShow = Article::where('author_id', Auth::id())->latest()->get();
+        $articles = Article::latest()->get();
+        $articleTotal = Article::count();
         $userTotal = User::count();
-        return view('admin.dashboard', compact('artikelCount', 'artikelShow', 'artikel', 'artikelTotal', 'userTotal'));
+        return view('admin.dashboard', compact('articleCount', 'articleShow', 'articles', 'articleTotal', 'userTotal'));
     }
 
     public function userTable()
@@ -113,15 +112,15 @@ class ArtikelController extends Controller
     public function adminArtikel()
     {
         $user = auth()->user();
-        $artikelCount = Artikel::where('author_id', Auth::id())->count();
-        $artikel = Artikel::where('author_id', $user->id)->latest()->get();
-        return view('artikel.adminartikel', compact('artikel', 'artikelCount'));
+        $articleCount = Article::where('author_id', Auth::id())->count();
+        $articles = Article::where('author_id', $user->id)->latest()->get();
+        return view('articles.myarticles', compact('articles', 'articleCount'));
     }
 
     public function updateRoleSwitch(Request $request, User $user)
     {
         $user->syncRoles([$request->role]); 
-        return redirect()->back()->with('success', 'Role berhasil diubah!');
+        return redirect()->back()->with('success', 'Role updated!');
     }
 
 
@@ -129,38 +128,39 @@ class ArtikelController extends Controller
 
     public function indexEditor()
     {
-        $artikelCount = Artikel::where('author_id', Auth::id())->count();
-        $artikelShow = Artikel::where('author_id', Auth::id())->latest()->get();
-        $artikel = Artikel::latest()->get();
-        return view('editor.dashboard', compact('artikelCount', 'artikelShow', 'artikel'));
+        $articleCount = Article::where('author_id', Auth::id())->count();
+        $articleShow = Article::where('author_id', Auth::id())->latest()->get();
+        $articles = Article::latest()->get();
+        return view('editor.dashboard', compact('articleCount', 'articleShow', 'articles'));
     }
 
     public function editorArtikel()
     {
         $user = auth()->user();
-        $artikelCount = Artikel::where('author_id', Auth::id())->count();
-        $artikel = Artikel::where('author_id', $user->id)->latest()->get();
-        return view('artikel.myartikel', compact('artikel', 'artikelCount'));
+        $articleCount = Article::where('author_id', Auth::id())->count();
+        $articles = Article::where('author_id', $user->id)->latest()->get();
+        return view('articles.myarticles', compact('articles', 'articleCount'));
     }
 
     public function showEditor($id)
     {
-        $artikel = Artikel::findOrFail($id);
-        return view('artikel.showeditor', compact('artikel'));
+        $article = Article::findOrFail($id);
+        return view('articles.showuser', compact('article'));
     }
 
     // ----------------------User -------------------
 
     public function indexUser()
     {
-        $artikel = Artikel::latest()->get();
-        return view('user.dashboard', compact('artikel'));
+        $articleTotal = Article::count();
+        $articles = Article::latest()->get();
+        return view('user.dashboard', compact('articles', 'articleTotal'));
     }
 
     public function showUser($id)
     {
-        $artikel = Artikel::findOrFail($id);
-        return view('artikel.showuser', compact('artikel'));
+        $article = Article::findOrFail($id);
+        return view('articles.showuser', compact('article'));
     }
 
     public function updateRole(Request $request, User $user)
@@ -169,9 +169,9 @@ class ArtikelController extends Controller
 
         $user->assignRole($request->role);
 
-        $artikelCount = Artikel::where('author_id', Auth::id())->count();
-        $artikelShow = Artikel::where('author_id', Auth::id())->latest()->get();
-        $artikel = Artikel::latest()->get();
+        $articleCount = Article::where('author_id', Auth::id())->count();
+        $articleShow = Article::where('author_id', Auth::id())->latest()->get();
+        $articles = Article::latest()->get();
 
         // return view('editor.dashboard', compact('user', 'artikelCount', 'artikelShow', 'artikel'));
         return view('welcome', compact('user'));

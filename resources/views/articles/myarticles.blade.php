@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Dashboard') }}
+            {{ __('My Articles') }}
         </h2>
     </x-slot>
 
@@ -10,40 +10,15 @@
             <div class="grid gap-6 lg:grid-cols-2">
                 <div class="flex justify-between items-center rounded-3xl bg-white p-6 shadow-sm border border-slate-200">
                     <div>
-                        <div class="text-sm font-semibold uppercase tracking-[0.24em] text-orange-600">Statistics</div>
-                        <div class="mt-4 text-4xl font-bold text-slate-900">{{$articleTotal}}</div>
-                        <div class="mt-2 text-sm text-slate-500">Total registered articles</div>
-                    </div>
-                    <div>
-                        <i class="fas fa-chart-line text-4xl text-orange-600"></i>
-                    </div>
-                </div>
 
-                <div class="flex justify-between items-center rounded-3xl bg-white p-6 shadow-sm border border-slate-200">
-                    <div>
-                        <div class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-600">Total registered users</div>
-                        <div class="mt-4 text-4xl font-bold text-slate-900">{{$userTotal}}</div>
-                        <div class="mt-2 text-sm text-slate-500"></div>
-                        <a href="{{ route('admin.usertable') }}" 
-                               class="inline-flex items-center rounded-md bg-orange-600 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-700">
-                               Manage Users
-                        </a>
-                    </div>
-                    <div>
-                        <i class="fas fa-users text-4xl text-orange-600"></i>
-                    </div>
-                </div>
-
-                <div class="flex justify-between items-center rounded-3xl bg-white p-6 shadow-sm border border-slate-200">
-                    <div>
                         <div class="text-sm font-semibold uppercase tracking-[0.24em] text-orange-600">Articles You Wrote</div>
                         <div class="mt-4 text-4xl font-bold text-slate-900">{{ $articleCount }}
                             <span class="mt-2 text-sm text-slate-500">Articles</span>
                         </div>
                         <div class="mt-6 flex flex-wrap gap-3">
-                            <a href="{{ route('articles.myarticles') }}" 
+                            <a href="{{ auth()->user()->hasRole('admin') ? route('admin.dashboard') : route('editor.dashboard') }}" 
                                class="inline-flex items-center rounded-md bg-orange-600 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-700">
-                               My Articles
+                               All Articles
                             </a>
                         </div>
                     </div>
@@ -55,7 +30,7 @@
                 <div class="flex justify-between items-center rounded-3xl bg-white p-6 shadow-sm border border-slate-200">
                     <div>
                         <div class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-600">Quick Actions</div>
-                        <div class="mt-4 text-lg font-semibold text-slate-900">Add and write articles.</div>
+                        <div class="mt-4 text-lg font-semibold text-slate-900">Add and Write Articles.</div>
                         <div class="mt-6 flex flex-wrap gap-3">
                             <a href="{{ route('articles.create') }}" 
                                class="inline-flex items-center rounded-md bg-orange-600 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-700">
@@ -70,8 +45,8 @@
             </div>
             
 
-            <!-- list of articles -->
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight mt-4">All Articles</h2>
+            <!-- list of user's articles -->
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight mt-4">{{ __('My Articles') }}</h2>
             <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-4">
                 
                 @foreach ($articles as $article)

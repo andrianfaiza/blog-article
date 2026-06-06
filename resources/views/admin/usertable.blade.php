@@ -3,9 +3,9 @@
         <div class="flex justify-between">
             <a href="{{ auth()->user()->hasRole('admin') ? route('admin.dashboard') : route('editor.dashboard')}}"
                            class="text-xl font-semibold text-gray-900 text-white">
-                           <- Kembali
+                           <- Back
                         </a>
-            <h2 class="font-semibold text-xl text-white leading-tight">Kelola Users</h2>
+            <h2 class="font-semibold text-xl text-white leading-tight">Manage Users</h2>
         </div>
     </x-slot>
 
@@ -19,7 +19,7 @@
                             <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Name</th>
                             <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Email</th>
                             <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Aksi</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200 bg-white">
@@ -35,17 +35,17 @@
                                         <select name="role" 
                                                 class="px- py-2 border rounded-md focus:ring focus:ring-blue-300">
                                             <option value="" disabled selected>
-                                                {{ $user->getRoleNames()->first() ?? 'Pilih Role' }}
+                                                {{ $user->getRoleNames()->first() ?? 'Select Role' }}
                                             </option>
 
-                                            <!-- Pilihan role lain -->
+                                            <!-- Other role options -->
                                             <option value="admin">admin</option>
                                             <option value="editor">editor</option>
                                         </select>
 
                                         <button type="submit" 
                                                 class="ml-2 px-3 py-1 text-xs font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700">
-                                            Ubah
+                                            <i class="fas fa-pen-to-square text-base"></i>
                                         </button>
                                     </form>
 
@@ -54,7 +54,7 @@
                                     <form action="{{route('user.destroy',$user->id)}}" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="px-3 py-1 text-xs font-semibold rounded-md bg-red-600 text-white hover:bg-red-700">Hapus User</button>
+                                        <button type="submit" class="px-3 py-1 text-xs font-semibold rounded-md bg-red-600 text-white hover:bg-red-700"><i class="fas fa-trash text-base"></i></button>
                                     </form>
                                 </td>
                             </tr>

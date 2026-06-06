@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\User;
 
-class Artikel extends Model
+class Article extends Model
 {
-    protected $table = 'artikels';
+    protected $table = 'articles';
 
     protected $fillable = [
         'header',
