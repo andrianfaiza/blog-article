@@ -172,8 +172,7 @@ class ArticleController extends Controller
         $articleCount = Article::where('author_id', Auth::id())->count();
         $articleShow = Article::where('author_id', Auth::id())->latest()->get();
         $articles = Article::latest()->get();
-
-        // return view('editor.dashboard', compact('user', 'artikelCount', 'artikelShow', 'artikel'));
-        return view('welcome', compact('user'));
+        
+        return view('dashboard', compact('user'));
     }
 }
