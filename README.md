@@ -62,7 +62,7 @@ Before getting started, make sure you have installed:
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/yourusername/blog.git
+git clone https://github.com/andrianfaiza/blog-article
 cd blog
 ```
 
